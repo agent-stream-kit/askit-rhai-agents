@@ -2,8 +2,8 @@ use std::sync::OnceLock;
 use std::vec;
 
 use agent_stream_kit::{
-    ASKit, Agent, AgentConfigs, AgentContext, AgentData, AgentDefinition, AgentError, AgentOutput,
-    AgentValue, AgentValueMap, AsAgent, AsAgentData, async_trait, new_agent_boxed,
+    ASKit, Agent, AgentConfigs, AgentContext, AgentDefinition, AgentError, AgentOutput, AgentValue,
+    AgentValueMap, AsAgent, AsAgentData, async_trait, new_agent_boxed,
 };
 
 use rhai::{AST, Dynamic, Engine, Scope};
@@ -86,7 +86,7 @@ impl AsAgent for RhaiScriptAgent {
         &mut self,
         ctx: AgentContext,
         _pin: String,
-        data: AgentData,
+        value: AgentValue,
     ) -> Result<(), AgentError> {
         let Some(ast) = &self.ast else {
             return Ok(());
@@ -95,20 +95,16 @@ impl AsAgent for RhaiScriptAgent {
 
         let mut scope = Scope::new();
         // scope.push("ctx", Dynamic::from(ctx.clone()));
-        scope.push("data", from_data_to_dynamic(data)?);
+        scope.push("value", from_value_to_dynamic(value)?);
 
         let result = engine
             .eval_ast_with_scope::<Dynamic>(&mut scope, ast)
             .map_err(|e| AgentError::IoError(format!("Rhai Runtime Error: {}", e)))?;
 
-        let out_data: AgentData = from_dynamic_to_data(&result)?;
+        let out_value: AgentValue = from_dynamic_to_value(&result)?;
 
-        self.try_output(ctx, PORT_DATA, out_data)
+        self.try_output(ctx, PORT_VALUE, out_value)
     }
-}
-
-fn from_data_to_dynamic(data: AgentData) -> Result<Dynamic, AgentError> {
-    from_value_to_dynamic(data.value)
 }
 
 fn from_value_to_dynamic(value: AgentValue) -> Result<Dynamic, AgentError> {
@@ -138,11 +134,6 @@ fn from_value_to_dynamic(value: AgentValue) -> Result<Dynamic, AgentError> {
         // Just store AgentValue directly
         _ => Ok(Dynamic::from(value)),
     }
-}
-
-fn from_dynamic_to_data(value: &Dynamic) -> Result<AgentData, AgentError> {
-    let agent_value = from_dynamic_to_value(value)?;
-    Ok(AgentData::from_value(agent_value))
 }
 
 fn from_dynamic_to_value(value: &Dynamic) -> Result<AgentValue, AgentError> {
@@ -213,7 +204,7 @@ fn from_dynamic_to_value(value: &Dynamic) -> Result<AgentValue, AgentError> {
 static AGENT_KIND: &str = "agent";
 static CATEGORY: &str = "Scripting";
 
-static PORT_DATA: &str = "data";
+static PORT_VALUE: &str = "value";
 
 static CONFIG_SCRIPT: &str = "script";
 
@@ -226,8 +217,8 @@ pub fn register_agents(askit: &ASKit) {
         )
         .title("Rhai Script")
         .category(CATEGORY)
-        .inputs(vec![PORT_DATA])
-        .outputs(vec![PORT_DATA])
+        .inputs(vec![PORT_VALUE])
+        .outputs(vec![PORT_VALUE])
         .text_config_with(CONFIG_SCRIPT, "", |entry| entry.title("Script")),
     );
 }
