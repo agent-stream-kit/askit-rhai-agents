@@ -1,10 +1,10 @@
 use std::sync::OnceLock;
-use std::vec;
 
 use agent_stream_kit::{
-    ASKit, Agent, AgentConfigs, AgentContext, AgentDefinition, AgentError, AgentOutput, AgentValue,
-    AgentValueMap, AsAgent, AsAgentData, async_trait, new_agent_boxed,
+    ASKit, Agent, AgentConfigs, AgentContext, AgentError, AgentOutput, AgentValue, AgentValueMap,
+    AsAgent, AsAgentData, async_trait,
 };
+use askit_macros::askit_agent;
 
 use rhai::{AST, Dynamic, Engine, Scope};
 
@@ -17,7 +17,21 @@ fn get_engine() -> &'static Engine {
     })
 }
 
+static CATEGORY: &str = "Rhai";
+static PORT_VALUE: &str = "value";
+static CONFIG_SCRIPT: &str = "script";
+
 // Rhai Script
+#[askit_agent(
+    title = "Rhai Script",
+    category = CATEGORY,
+    inputs = [PORT_VALUE],
+    outputs = [PORT_VALUE],
+    text_config(
+        name = CONFIG_SCRIPT,
+        title = "Script"
+    )
+)]
 struct RhaiScriptAgent {
     data: AsAgentData,
     ast: Option<AST>,
@@ -199,26 +213,4 @@ fn from_dynamic_to_value(value: &Dynamic) -> Result<AgentValue, AgentError> {
         "Unsupported Rhai data type: {}",
         value.type_name()
     )))
-}
-
-static AGENT_KIND: &str = "agent";
-static CATEGORY: &str = "Scripting";
-
-static PORT_VALUE: &str = "value";
-
-static CONFIG_SCRIPT: &str = "script";
-
-pub fn register_agents(askit: &ASKit) {
-    askit.register_agent(
-        AgentDefinition::new(
-            AGENT_KIND,
-            "rhai_script",
-            Some(new_agent_boxed::<RhaiScriptAgent>),
-        )
-        .title("Rhai Script")
-        .category(CATEGORY)
-        .inputs(vec![PORT_VALUE])
-        .outputs(vec![PORT_VALUE])
-        .text_config_with(CONFIG_SCRIPT, "", |entry| entry.title("Script")),
-    );
 }
