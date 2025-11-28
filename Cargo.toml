@@ -1,17 +1,18 @@
 [package]
 name = "askit-rhai-agents"
-version = "0.2.0"
+version = "0.2.1"
 description = "Rhai Agents for Agent Stream Kit"
 authors = ["Akira Ishino <akira@lumilab.jp>"]
 edition = "2024"
 license = "Apache-2.0 OR MIT"
 
 [dependencies]
-agent-stream-kit = "0.11"
-askit-macros = "0.11"
+agent-stream-kit = "0.12.0"
+askit-macros = "0.12.0"
 rhai = { version = "1.23.6", features = ["sync", "serde"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 # [patch.crates-io]
-# agent-stream-kit = { path = "../agent-stream-kit" }
+# agent-stream-kit = { path = "../agent-stream-kit/agent-stream-kit" }
+# askit-macros = { path = "../agent-stream-kit/askit-macros" }

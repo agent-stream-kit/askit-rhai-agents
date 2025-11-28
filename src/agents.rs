@@ -74,14 +74,6 @@ impl AsAgent for RhaiScriptAgent {
         Ok(agent)
     }
 
-    fn data(&self) -> &AsAgentData {
-        &self.data
-    }
-
-    fn mut_data(&mut self) -> &mut AsAgentData {
-        &mut self.data
-    }
-
     fn configs_changed(&mut self) -> Result<(), AgentError> {
         let engine = get_engine();
         let script = self.configs()?.get_string(CONFIG_SCRIPT)?;
