@@ -1,8 +1,8 @@
 use std::sync::OnceLock;
 
 use agent_stream_kit::{
-    ASKit, Agent, AgentConfigs, AgentContext, AgentError, AgentOutput, AgentValue, AgentValueMap,
-    AsAgent, AsAgentData, async_trait,
+    ASKit, Agent, AgentConfigs, AgentContext, AgentData, AgentError, AgentOutput, AgentValue,
+    AgentValueMap, AsAgent, async_trait,
 };
 use askit_macros::askit_agent;
 
@@ -33,7 +33,7 @@ static CONFIG_SCRIPT: &str = "script";
     )
 )]
 struct RhaiScriptAgent {
-    data: AsAgentData,
+    data: AgentData,
     ast: Option<AST>,
 }
 
@@ -65,7 +65,7 @@ impl AsAgent for RhaiScriptAgent {
             .and_then(|c| c.get_string(CONFIG_SCRIPT).ok())
             .unwrap_or_default();
         let mut agent = Self {
-            data: AsAgentData::new(askit, id, def_name, config),
+            data: AgentData::new(askit, id, def_name, config),
             ast: None,
         };
         if !script.is_empty() {
