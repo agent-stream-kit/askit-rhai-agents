@@ -1,7 +1,7 @@
 use std::sync::OnceLock;
 
 use agent_stream_kit::{
-    ASKit, Agent, AgentConfigs, AgentContext, AgentData, AgentError, AgentOutput, AgentValue,
+    ASKit, Agent, AgentContext, AgentData, AgentError, AgentOutput, AgentSpec, AgentValue,
     AgentValueMap, AsAgent, async_trait,
 };
 use askit_macros::askit_agent;
@@ -54,18 +54,14 @@ impl RhaiScriptAgent {
 
 #[async_trait]
 impl AsAgent for RhaiScriptAgent {
-    fn new(
-        askit: ASKit,
-        id: String,
-        def_name: String,
-        config: Option<AgentConfigs>,
-    ) -> Result<Self, AgentError> {
-        let script = config
+    fn new(askit: ASKit, id: String, spec: AgentSpec) -> Result<Self, AgentError> {
+        let script = spec
+            .configs
             .as_ref()
             .and_then(|c| c.get_string(CONFIG_SCRIPT).ok())
             .unwrap_or_default();
         let mut agent = Self {
-            data: AgentData::new(askit, id, def_name, config),
+            data: AgentData::new(askit, id, spec),
             ast: None,
         };
         if !script.is_empty() {
