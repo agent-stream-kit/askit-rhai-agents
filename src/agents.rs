@@ -2,10 +2,8 @@ use std::sync::OnceLock;
 
 use agent_stream_kit::{
     ASKit, Agent, AgentContext, AgentData, AgentError, AgentOutput, AgentSpec, AgentValue,
-    AgentValueMap, AsAgent, async_trait,
+    AgentValueMap, AsAgent, askit_agent, async_trait,
 };
-use askit_macros::askit_agent;
-
 use rhai::{AST, Dynamic, Engine, Scope};
 
 static RHAI_ENGINE: OnceLock<Engine> = OnceLock::new();
