@@ -16,13 +16,14 @@ checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
 
 [[package]]
 name = "agent-stream-kit"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81a13a6495de591525e7c52a96908b7fb6ff4fd0e6b65145d4a2e30e130490de"
+checksum = "fa74e38eca9365ed22da4cdc77aa9d23228c294029373ea4474def66dfcb2077"
 dependencies = [
  "askit-macros",
  "async-trait",
  "fnv",
+ "im",
  "indexmap",
  "inventory",
  "log",
@@ -58,9 +59,9 @@ dependencies = [
 
 [[package]]
 name = "askit-macros"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4df9e3d6804861ddc5e8322a818837f0245109cf1f47305416bcc908ae60e4c"
+checksum = "65a07e424e927322681e3d87e08670f4081c1fdb62c692e05f431fd93f55d186"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -69,7 +70,7 @@ dependencies = [
 
 [[package]]
 name = "askit-rhai-agents"
-version = "0.2.5"
+version = "0.2.6"
 dependencies = [
  "agent-stream-kit",
  "rhai",
@@ -113,10 +114,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "812e12b5285cc515a9c72a5c1d3b6d46a19dac5acfef5265968c166106e31dd3"
 
 [[package]]
-name = "bumpalo"
-version = "3.19.0"
+name = "bitmaps"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
+checksum = "031043d04099746d8db04daf1fa424b2bc8bd69d92b25962dcde24da39ab64a2"
+dependencies = [
+ "typenum",
+]
+
+[[package]]
+name = "bumpalo"
+version = "3.19.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5dd9dc738b7a8311c7ade152424974d8115f2cdad61e8dab8dac9f2362298510"
 
 [[package]]
 name = "bytemuck"
@@ -314,6 +324,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100"
 
 [[package]]
+name = "im"
+version = "15.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d0acd33ff0285af998aaf9b57342af478078f53492322fafc47450e09397e0e9"
+dependencies = [
+ "bitmaps",
+ "rand_core 0.6.4",
+ "rand_xoshiro",
+ "serde",
+ "sized-chunks",
+ "typenum",
+ "version_check",
+]
+
+[[package]]
 name = "image"
 version = "0.24.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -387,9 +412,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "1.0.15"
+version = "1.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
+checksum = "92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2"
 
 [[package]]
 name = "jpeg-decoder"
@@ -702,9 +727,9 @@ dependencies = [
 
 [[package]]
 name = "portable-atomic"
-version = "1.11.1"
+version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f84267b20a16ea918e43c6a88433c2d54fa145c92a811b5b047ccbe153674483"
+checksum = "f59e70c4aef1e55797c2e8fd94a4f2a973fc972cfde0e0b05f683667b0cd39dd"
 
 [[package]]
 name = "powerfmt"
@@ -811,6 +836,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rand_xoshiro"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6f97cdb2a36ed4183de61b2f824cc45c9f1037f28afe0a322e9fff4c108b5aaa"
+dependencies = [
+ "rand_core 0.6.4",
+]
+
+[[package]]
 name = "rawpointer"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -863,12 +897,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d"
 
 [[package]]
-name = "ryu"
-version = "1.0.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
-
-[[package]]
 name = "safe_arch"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -909,15 +937,15 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.145"
+version = "1.0.148"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "402a6f66d8c709116cf22f558eab210f5a50187f702eb4d7e5ef38d9a7f1c79c"
+checksum = "3084b546a1dd6289475996f182a22aba973866ea8e8b02c51d9f46b1336a22da"
 dependencies = [
  "itoa",
  "memchr",
- "ryu",
  "serde",
  "serde_core",
+ "zmij",
 ]
 
 [[package]]
@@ -935,15 +963,25 @@ dependencies = [
 
 [[package]]
 name = "simd-adler32"
-version = "0.3.7"
+version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
+checksum = "e320a6c5ad31d271ad523dcf3ad13e2767ad8b1cb8f047f75a8aeaf8da139da2"
 
 [[package]]
 name = "siphasher"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56199f7ddabf13fe5074ce809e7d3f42b42ae711800501b5b16ea82ad029c39d"
+
+[[package]]
+name = "sized-chunks"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16d69225bde7a69b235da73377861095455d298f2b970996eec25ddbb42b3d1e"
+dependencies = [
+ "bitmaps",
+ "typenum",
+]
 
 [[package]]
 name = "smallvec"
@@ -1247,3 +1285,9 @@ dependencies = [
  "quote",
  "syn 2.0.111",
 ]
+
+[[package]]
+name = "zmij"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e6d6085d62852e35540689d1f97ad663e3971fc19cf5eceab364d62c646ea167"
