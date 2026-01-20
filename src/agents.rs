@@ -103,7 +103,7 @@ impl AsAgent for RhaiScriptAgent {
 
         let out_value: AgentValue = from_dynamic_to_value(&result)?;
 
-        self.try_output(ctx, PORT_VALUE, out_value)
+        self.output(ctx, PORT_VALUE, out_value).await
     }
 }
 
